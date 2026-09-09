@@ -67,7 +67,7 @@ type AuthenticatorIdentityModel struct {
 	IdentityPath     types.String            `tfsdk:"identity_path"`
 	TokenAppProperty types.String            `tfsdk:"token_app_property"`
 	ClaimAliases     map[string]types.String `tfsdk:"claim_aliases"`
-	EnforcedClaims   []string                `tfsdk:"enforced_claims"`
+	EnforcedClaims   []types.String          `tfsdk:"enforced_claims"`
 }
 
 func (r *AuthenticatorResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -452,7 +452,11 @@ func buildIdentityPayload(identity *AuthenticatorIdentityModel) map[string]inter
 		payload["claim_aliases"] = ca
 	}
 	if len(identity.EnforcedClaims) > 0 {
-		payload["enforced_claims"] = identity.EnforcedClaims
+		ec := make([]string, len(identity.EnforcedClaims))
+		for i, v := range identity.EnforcedClaims {
+			ec[i] = v.ValueString()
+		}
+		payload["enforced_claims"] = ec
 	}
 	return payload
 }
@@ -549,7 +553,7 @@ func parseIdentityFromMap(data map[string]interface{}) *AuthenticatorIdentityMod
 	if enforced, ok := raw["enforced_claims"].([]interface{}); ok {
 		for _, v := range enforced {
 			if str, ok := v.(string); ok {
-				im.EnforcedClaims = append(im.EnforcedClaims, str)
+				im.EnforcedClaims = append(im.EnforcedClaims, types.StringValue(str))
 			}
 		}
 	}

@@ -89,7 +89,11 @@ func TestAuthenticatorResource_buildAuthenticatorPayload(t *testing.T) {
 						"sub": types.StringValue("subject"),
 						"aud": types.StringValue("audience"),
 					},
-					EnforcedClaims: []string{"sub", "aud", "exp"},
+					EnforcedClaims: []types.String{
+						types.StringValue("sub"),
+						types.StringValue("aud"),
+						types.StringValue("exp"),
+					},
 				},
 			},
 			Annotations: map[string]types.String{
@@ -223,7 +227,7 @@ func TestAuthenticatorResource_buildAuthenticatorPayload(t *testing.T) {
 					IdentityPath:     types.StringNull(),
 					TokenAppProperty: types.StringNull(),
 					ClaimAliases:     map[string]types.String{},
-					EnforcedClaims:   []string{},
+					EnforcedClaims:   []types.String{},
 				},
 			},
 		}
@@ -348,9 +352,9 @@ func TestAuthenticatorResource_parseAuthenticatorResponse(t *testing.T) {
 		assert.Equal(t, types.StringValue("audience"), data.Data.Identity.ClaimAliases["aud"])
 
 		require.NotNil(t, data.Data.Identity.EnforcedClaims)
-		assert.Contains(t, data.Data.Identity.EnforcedClaims, "sub")
-		assert.Contains(t, data.Data.Identity.EnforcedClaims, "aud")
-		assert.Contains(t, data.Data.Identity.EnforcedClaims, "exp")
+		assert.Contains(t, data.Data.Identity.EnforcedClaims, types.StringValue("sub"))
+		assert.Contains(t, data.Data.Identity.EnforcedClaims, types.StringValue("aud"))
+		assert.Contains(t, data.Data.Identity.EnforcedClaims, types.StringValue("exp"))
 
 		// Check Annotations
 		assert.Len(t, data.Annotations, 2)
