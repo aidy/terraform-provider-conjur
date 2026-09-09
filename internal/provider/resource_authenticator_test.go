@@ -85,9 +85,9 @@ func TestAuthenticatorResource_buildAuthenticatorPayload(t *testing.T) {
 				Identity: &AuthenticatorIdentityModel{
 					IdentityPath:     types.StringValue("/identity/path"),
 					TokenAppProperty: types.StringValue("app_property"),
-					ClaimAliases: map[string]string{
-						"sub": "subject",
-						"aud": "audience",
+					ClaimAliases: map[string]types.String{
+						"sub": types.StringValue("subject"),
+						"aud": types.StringValue("audience"),
 					},
 					EnforcedClaims: []string{"sub", "aud", "exp"},
 				},
@@ -222,7 +222,7 @@ func TestAuthenticatorResource_buildAuthenticatorPayload(t *testing.T) {
 				Identity: &AuthenticatorIdentityModel{
 					IdentityPath:     types.StringNull(),
 					TokenAppProperty: types.StringNull(),
-					ClaimAliases:     map[string]string{},
+					ClaimAliases:     map[string]types.String{},
 					EnforcedClaims:   []string{},
 				},
 			},
@@ -344,8 +344,8 @@ func TestAuthenticatorResource_parseAuthenticatorResponse(t *testing.T) {
 		assert.Equal(t, "app_property", data.Data.Identity.TokenAppProperty.ValueString())
 
 		require.NotNil(t, data.Data.Identity.ClaimAliases)
-		assert.Equal(t, "subject", data.Data.Identity.ClaimAliases["sub"])
-		assert.Equal(t, "audience", data.Data.Identity.ClaimAliases["aud"])
+		assert.Equal(t, types.StringValue("subject"), data.Data.Identity.ClaimAliases["sub"])
+		assert.Equal(t, types.StringValue("audience"), data.Data.Identity.ClaimAliases["aud"])
 
 		require.NotNil(t, data.Data.Identity.EnforcedClaims)
 		assert.Contains(t, data.Data.Identity.EnforcedClaims, "sub")
