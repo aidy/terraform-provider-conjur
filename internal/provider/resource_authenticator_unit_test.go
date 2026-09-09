@@ -70,7 +70,10 @@ func TestAuthenticatorResource_Create(t *testing.T) {
 					Audience: types.StringValue("https://example.com"),
 					Issuer:   types.StringValue("https://issuer.com"),
 				},
-				Annotations: map[string]string{"env": "prod", "team": "platform"},
+				Annotations: map[string]types.String{
+					"env":  types.StringValue("prod"),
+					"team": types.StringValue("platform"),
+				},
 				Owner: types.ObjectNull(map[string]attr.Type{
 					"kind": types.StringType,
 					"id":   types.StringType,
@@ -531,7 +534,7 @@ func TestAuthenticatorResource_Delete(t *testing.T) {
 				Type:        types.StringValue("authn-jwt"),
 				Name:        types.StringValue("prod-jwt"),
 				Enabled:     types.BoolValue(true),
-				Annotations: map[string]string{"env": "prod"},
+				Annotations: map[string]types.String{"env": types.StringValue("prod")},
 				Owner: types.ObjectNull(map[string]attr.Type{
 					"kind": types.StringType,
 					"id":   types.StringType,
