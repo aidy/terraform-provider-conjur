@@ -41,13 +41,13 @@ type HostResource struct {
 
 // HostResourceModel describes the resource data model.
 type HostResourceModel struct {
-	Name             types.String          `tfsdk:"name"`
-	Branch           types.String          `tfsdk:"branch"`
-	Type             types.String          `tfsdk:"type"`
-	Owner            *HostOwnerModel       `tfsdk:"owner"`
-	RestrictedTo     types.List            `tfsdk:"restricted_to"`
-	AuthnDescriptors []HostAuthnDescriptor `tfsdk:"authn_descriptors"`
-	Annotations      map[string]string     `tfsdk:"annotations"`
+	Name             types.String            `tfsdk:"name"`
+	Branch           types.String            `tfsdk:"branch"`
+	Type             types.String            `tfsdk:"type"`
+	Owner            *HostOwnerModel         `tfsdk:"owner"`
+	RestrictedTo     types.List              `tfsdk:"restricted_to"`
+	AuthnDescriptors []HostAuthnDescriptor   `tfsdk:"authn_descriptors"`
+	Annotations      map[string]types.String `tfsdk:"annotations"`
 }
 
 type HostOwnerModel struct {
@@ -346,7 +346,10 @@ func (r *HostResource) buildHostPayload(data *HostResourceModel) (*conjurapi.Wor
 	}
 
 	if len(data.Annotations) > 0 {
-		host.Annotations = data.Annotations
+		host.Annotations = map[string]string{}
+		for k, v := range data.Annotations {
+			host.Annotations[k] = v.ValueString()
+		}
 	}
 
 	return &host, nil

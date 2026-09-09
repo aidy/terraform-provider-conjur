@@ -96,9 +96,9 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 					ServiceID: types.StringValue("jenkins"),
 				},
 			},
-			Annotations: map[string]string{
-				"environment": "production",
-				"team":        "security",
+			Annotations: map[string]types.String{
+				"environment": types.StringValue("production"),
+				"team":        types.StringValue("security"),
 			},
 		}
 
@@ -356,7 +356,7 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 			},
 			RestrictedTo: types.ListNull(types.StringType),
 			Owner:        nil,
-			Annotations:  map[string]string{},
+			Annotations:  map[string]types.String{},
 		}
 
 		host, err := r.buildHostPayload(data)

@@ -82,7 +82,10 @@ func TestHostResource_Create(t *testing.T) {
 						},
 					},
 				},
-				Annotations: map[string]string{"env": "prod", "team": "platform"},
+				Annotations: map[string]types.String{
+					"env":  types.StringValue("prod"),
+					"team": types.StringValue("platform"),
+				},
 			},
 			setupMock: func(mockV2 *mocks.MockClientV2) {
 				mockV2.On("CreateWorkload", mock.MatchedBy(func(w conjurapi.Workload) bool {
@@ -542,7 +545,7 @@ func TestHostResource_ValidateConfig(t *testing.T) {
 				RestrictedTo: types.ListNull(types.StringType),
 				AuthnDescriptors: []HostAuthnDescriptor{
 					{
-						Type:    types.StringValue("jwt"),
+						Type: types.StringValue("jwt"),
 						Data: map[string]string{"aud": `["aud1", "aud2"]`},
 					},
 				},
@@ -608,4 +611,3 @@ func TestHostResource_ValidateConfig(t *testing.T) {
 		})
 	}
 }
-
