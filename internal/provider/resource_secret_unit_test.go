@@ -43,11 +43,14 @@ func TestSecretResource_Create(t *testing.T) {
 		{
 			name: "creation with optional fields",
 			data: SecretResourceModel{
-				Name:        types.StringValue("api-key"),
-				Branch:      types.StringValue("/data/production"),
-				Value:       types.StringValue("supersecret"),
-				MimeType:    types.StringValue("application/json"),
-				Annotations: map[string]string{"env": "prod", "team": "platform"},
+				Name:     types.StringValue("api-key"),
+				Branch:   types.StringValue("/data/production"),
+				Value:    types.StringValue("supersecret"),
+				MimeType: types.StringValue("application/json"),
+				Annotations: map[string]types.String{
+					"env":  types.StringValue("prod"),
+					"team": types.StringValue("platform"),
+				},
 				Permissions: []SecretPermission{
 					{
 						Subject: SecretSubject{

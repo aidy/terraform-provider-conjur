@@ -54,14 +54,14 @@ type SecretResource struct {
 }
 
 type SecretResourceModel struct {
-	Branch         types.String       `tfsdk:"branch"`
-	Name           types.String       `tfsdk:"name"`
-	MimeType       types.String       `tfsdk:"mime_type"`
-	Value          types.String       `tfsdk:"value"`
-	ValueWO        types.String       `tfsdk:"value_wo"`
-	ValueWOVersion types.Int32        `tfsdk:"value_wo_version"`
-	Annotations    map[string]string  `tfsdk:"annotations"`
-	Permissions    []SecretPermission `tfsdk:"permissions"`
+	Branch         types.String            `tfsdk:"branch"`
+	Name           types.String            `tfsdk:"name"`
+	MimeType       types.String            `tfsdk:"mime_type"`
+	Value          types.String            `tfsdk:"value"`
+	ValueWO        types.String            `tfsdk:"value_wo"`
+	ValueWOVersion types.Int32             `tfsdk:"value_wo_version"`
+	Annotations    map[string]types.String `tfsdk:"annotations"`
+	Permissions    []SecretPermission      `tfsdk:"permissions"`
 }
 
 type SecretPermission struct {
@@ -450,7 +450,10 @@ func (r *SecretResource) buildSecretPayload(data *SecretResourceModel) (conjurap
 	}
 
 	if len(data.Annotations) > 0 {
-		secret.Annotations = data.Annotations
+		secret.Annotations = map[string]string{}
+		for k, v := range data.Annotations {
+			secret.Annotations[k] = v.ValueString()
+		}
 	}
 
 	return secret, nil
@@ -490,7 +493,10 @@ func (r *SecretResource) parseSecretResponse(secretResp conjurapi.StaticSecretRe
 	}
 
 	if len(secretResp.Annotations) != 0 {
-		data.Annotations = secretResp.Annotations
+		data.Annotations = map[string]types.String{}
+		for k, v := range secretResp.Annotations {
+			data.Annotations[k] = types.StringValue(v)
+		}
 	}
 
 	return nil

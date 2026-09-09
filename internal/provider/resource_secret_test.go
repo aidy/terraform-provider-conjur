@@ -55,7 +55,7 @@ func TestBuildSecretPayload(t *testing.T) {
 				Privileges: types.ListValueMust(types.StringType, privs),
 			},
 		},
-		Annotations: map[string]string{"env": "dev"},
+		Annotations: map[string]types.String{"env": types.StringValue("dev")},
 	}
 
 	secret, err := r.buildSecretPayload(model)
@@ -117,7 +117,7 @@ func TestParseSecretResponse(t *testing.T) {
 	}
 
 	assert.ElementsMatch(t, []string{"read"}, privStrs)
-	assert.Equal(t, map[string]string{"env": "prod"}, data.Annotations)
+	assert.Equal(t, map[string]types.String{"env": types.StringValue("prod")}, data.Annotations)
 }
 
 func TestGenerateSecretDeletionPolicy(t *testing.T) {
