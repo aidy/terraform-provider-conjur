@@ -56,9 +56,9 @@ type HostOwnerModel struct {
 }
 
 type HostAuthnDescriptor struct {
-	Type      types.String      `tfsdk:"type"`
-	ServiceID types.String      `tfsdk:"service_id"`
-	Data      map[string]string `tfsdk:"data"`
+	Type      types.String            `tfsdk:"type"`
+	ServiceID types.String            `tfsdk:"service_id"`
+	Data      map[string]types.String `tfsdk:"data"`
 }
 
 func (r *HostResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -317,7 +317,7 @@ func (r *HostResource) buildHostPayload(data *HostResourceModel) (*conjurapi.Wor
 			// into a []string; otherwise it is sent as-is.
 			descriptorData := make(map[string]any, len(v.Data))
 			for k, val := range v.Data {
-				descriptorData[k] = claimValueToAPI(val)
+				descriptorData[k] = claimValueToAPI(val.ValueString())
 			}
 			descriptor.Data = descriptorData
 		}

@@ -86,9 +86,9 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("jwt"),
 					ServiceID: types.StringValue("jwt-service"),
-					Data: map[string]string{
-						"sub": "test-subject",
-						"aud": "test-audience",
+					Data: map[string]types.String{
+						"sub": types.StringValue("test-subject"),
+						"aud": types.StringValue("test-audience"),
 					},
 				},
 				{
@@ -175,7 +175,7 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("jwt"),
 					ServiceID: types.StringValue("jwt-service"),
-					Data:      map[string]string{},
+					Data:      map[string]types.String{},
 				},
 			},
 			RestrictedTo: types.ListNull(types.StringType),
@@ -202,13 +202,13 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("jwt"),
 					ServiceID: types.StringValue("jwt-service"),
-					Data: map[string]string{
-						"aud": `["app1", "app2", "app3"]`,
-						"sub": "single-value",
+					Data: map[string]types.String{
+						"aud": types.StringValue(`["app1", "app2", "app3"]`),
+						"sub": types.StringValue("single-value"),
 						// A comma is a legal URI character (e.g. a query
 						// string), and must be preserved unchanged since it
 						// has no meaning outside a JSON array value.
-						"iss": "https://issuer.example.com/path?a=1,2",
+						"iss": types.StringValue("https://issuer.example.com/path?a=1,2"),
 					},
 				},
 			},
@@ -239,16 +239,16 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("jwt"),
 					ServiceID: types.StringValue("jwt-service"),
-					Data: map[string]string{
+					Data: map[string]types.String{
 						// Starts with "[" but isn't valid JSON: sent
 						// unchanged as a literal string rather than
 						// rejected, since there's no way to tell a
 						// malformed array apart from an intentional
 						// bracket-leading scalar.
-						"aud": "[redacted]",
+						"aud": types.StringValue("[redacted]"),
 						// Valid JSON, but not an array of strings (an
 						// array of numbers): also sent unchanged.
-						"sub": "[1, 2]",
+						"sub": types.StringValue("[1, 2]"),
 					},
 				},
 			},
@@ -375,7 +375,7 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("jwt"),
 					ServiceID: types.StringValue("jwt-service"),
-					Data:      map[string]string{"sub": "user1"},
+					Data:      map[string]types.String{"sub": types.StringValue("user1")},
 				},
 				{
 					Type:      types.StringValue("api_key"),
@@ -384,7 +384,7 @@ func TestHostResource_buildHostPayload(t *testing.T) {
 				{
 					Type:      types.StringValue("ldap"),
 					ServiceID: types.StringValue("ldap-service"),
-					Data:      map[string]string{}, // Empty data
+					Data:      map[string]types.String{}, // Empty data
 				},
 			},
 			RestrictedTo: types.ListNull(types.StringType),

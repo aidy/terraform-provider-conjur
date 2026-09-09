@@ -76,9 +76,9 @@ func TestHostResource_Create(t *testing.T) {
 					{
 						Type:      types.StringValue("jwt"),
 						ServiceID: types.StringValue("jwt-service"),
-						Data: map[string]string{
-							"sub": "test",
-							"aud": "myapp",
+						Data: map[string]types.String{
+							"sub": types.StringValue("test"),
+							"aud": types.StringValue("myapp"),
 						},
 					},
 				},
@@ -506,7 +506,7 @@ func TestHostResource_ValidateConfig(t *testing.T) {
 				AuthnDescriptors: []HostAuthnDescriptor{
 					{
 						Type: types.StringValue("jwt"),
-						Data: map[string]string{"sub": "user1"},
+						Data: map[string]types.String{"sub": types.StringValue("user1")},
 					},
 				},
 			},
@@ -546,7 +546,7 @@ func TestHostResource_ValidateConfig(t *testing.T) {
 				AuthnDescriptors: []HostAuthnDescriptor{
 					{
 						Type: types.StringValue("jwt"),
-						Data: map[string]string{"aud": `["aud1", "aud2"]`},
+						Data: map[string]types.String{"aud": types.StringValue(`["aud1", "aud2"]`)},
 					},
 				},
 			},
