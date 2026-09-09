@@ -59,9 +59,9 @@ func TestGroupResource_generateGroupPolicy(t *testing.T) {
 				Kind: types.StringValue("group"),
 				ID:   types.StringValue("jenkins-admins"),
 			},
-			Annotations: map[string]string{
-				"environment": "production",
-				"team":        "security",
+			Annotations: map[string]types.String{
+				"environment": types.StringValue("production"),
+				"team":        types.StringValue("security"),
 			},
 		}
 
@@ -179,7 +179,10 @@ func TestGenerateGroupPolicy_YAMLInjection(t *testing.T) {
 			}
 
 			if tc.annotations != nil {
-				data.Annotations = tc.annotations
+				data.Annotations = map[string]types.String{}
+				for k, v := range tc.annotations {
+					data.Annotations[k] = types.StringValue(v)
+				}
 			}
 
 			policy, err := r.generateGroupPolicy(data)

@@ -40,10 +40,10 @@ type GroupResource struct {
 
 // GroupResourceModel describes the resource data model.
 type GroupResourceModel struct {
-	Name        types.String      `tfsdk:"name"`
-	Branch      types.String      `tfsdk:"branch"`
-	Owner       *OwnerModel       `tfsdk:"owner"`
-	Annotations map[string]string `tfsdk:"annotations"`
+	Name        types.String            `tfsdk:"name"`
+	Branch      types.String            `tfsdk:"branch"`
+	Owner       *OwnerModel             `tfsdk:"owner"`
+	Annotations map[string]types.String `tfsdk:"annotations"`
 }
 
 type OwnerModel struct {
@@ -255,7 +255,7 @@ func (r *GroupResource) generateGroupPolicy(data *GroupResourceModel) (string, e
 	if len(data.Annotations) > 0 {
 		annotations := make(map[string]interface{})
 		for k, v := range data.Annotations {
-			annotations[k] = v
+			annotations[k] = v.ValueString()
 		}
 		group.Annotations = annotations
 	}

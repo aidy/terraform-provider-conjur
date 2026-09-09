@@ -78,9 +78,12 @@ func TestGroupResource_Create(t *testing.T) {
 		{
 			name: "creation with annotations",
 			data: GroupResourceModel{
-				Name:        types.StringValue("platform-team"),
-				Branch:      types.StringValue("data/teams"),
-				Annotations: map[string]string{"env": "prod", "department": "engineering"},
+				Name:   types.StringValue("platform-team"),
+				Branch: types.StringValue("data/teams"),
+				Annotations: map[string]types.String{
+					"env":        types.StringValue("prod"),
+					"department": types.StringValue("engineering"),
+				},
 			},
 			setupMock: func(mockV2 *mocks.MockClientV2) {
 				mockV2.On("LoadPolicy", conjurapi.PolicyModePatch, "data/teams", mock.MatchedBy(func(policy io.Reader) bool {
@@ -101,7 +104,10 @@ func TestGroupResource_Create(t *testing.T) {
 					Kind: types.StringValue("group"),
 					ID:   types.StringValue("managers"),
 				},
-				Annotations: map[string]string{"team": "security", "level": "critical"},
+				Annotations: map[string]types.String{
+					"team":  types.StringValue("security"),
+					"level": types.StringValue("critical"),
+				},
 			},
 			setupMock: func(mockV2 *mocks.MockClientV2) {
 				mockV2.On("LoadPolicy", conjurapi.PolicyModePatch, "data/groups", mock.Anything).Return(&conjurapi.PolicyResponse{}, nil)
@@ -370,7 +376,7 @@ func TestGroupResource_Delete(t *testing.T) {
 			data: GroupResourceModel{
 				Name:        types.StringValue("platform-team"),
 				Branch:      types.StringValue("data/teams"),
-				Annotations: map[string]string{"env": "prod"},
+				Annotations: map[string]types.String{"env": types.StringValue("prod")},
 			},
 			setupMock: func(mockV2 *mocks.MockClientV2) {
 				mockV2.On("LoadPolicy", conjurapi.PolicyModePatch, "data/teams", mock.Anything).Return(&conjurapi.PolicyResponse{}, nil)
